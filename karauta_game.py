@@ -2,28 +2,29 @@ import streamlit as st
 
 st.set_page_config(page_title="狩歌 練習アプリ", layout="centered")
 
-# スマホでも絶対に縦に崩さず4列の横並びを死守するCSS
+# ボタンの間隔を詰めてコンパクトにし、4列をきれいに並べるCSS
 st.markdown(
     """
     <style>
-    /* 親の並び順を強制的に横方向にする */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
+        gap: 4px !important;
     }
-    /* 各カラムの幅を25%ずつにして横に並べる */
     [data-testid="column"] {
         width: 25% !important;
         flex: 1 1 25% !important;
         min-width: unset !important;
+        padding: 0px 2px !important;
     }
     .stButton > button {
         width: 100%;
-        height: 2.8em;
-        font-size: 13px !important;
+        height: 2.5em;
+        font-size: 14px !important;
         font-weight: bold;
         padding: 0px !important;
+        margin: 2px 0px !important;
     }
     </style>
     """,
