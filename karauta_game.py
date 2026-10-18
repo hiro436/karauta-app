@@ -2,29 +2,39 @@ import streamlit as st
 
 st.set_page_config(page_title="狩歌 練習アプリ", layout="centered")
 
-# ボタンの間隔を詰めてコンパクトにし、4列をきれいに並べるCSS
+# スマホでの余白を完全に削る最強のCSS
 st.markdown(
     """
     <style>
+    /* 画面全体の余白を調整 */
+    .block-container {
+        padding-top: 2rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    /* 横並びブロックの間隔をゼロにする */
     [data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
-        gap: 4px !important;
+        gap: 2px !important;
+        margin-bottom: 2px !important;
     }
+    /* カラムの余白を強制削除 */
     [data-testid="column"] {
         width: 25% !important;
         flex: 1 1 25% !important;
         min-width: unset !important;
-        padding: 0px 2px !important;
+        padding: 0px 1px !important;
     }
+    /* ボタン自体の大きさと隙間を調整 */
     .stButton > button {
-        width: 100%;
-        height: 2.5em;
-        font-size: 14px !important;
+        width: 100% !important;
+        height: 2.3em !important;
+        font-size: 13px !important;
         font-weight: bold;
         padding: 0px !important;
-        margin: 2px 0px !important;
+        margin: 0px !important;
     }
     </style>
     """,
