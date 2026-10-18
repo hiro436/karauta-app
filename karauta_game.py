@@ -1,5 +1,28 @@
 import streamlit as st
 
+st.set_page_config(page_title="狩歌 練習アプリ", layout="centered")
+
+# スマホでもボタンを折り返さず綺麗な横並びグリッドにするカスタムCSS
+st.markdown(
+    """
+    <style>
+    /* ボタンの表示スタイルとグリッド調整 */
+    div[data-testid="column"] {
+        width: 23% !important;
+        flex: 0 0 23% !important;
+        min-width: 23% !important;
+    }
+    .stButton > button {
+        width: 100%;
+        height: 3em;
+        font-weight: bold;
+        padding: 0px !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("🎵 狩歌 練習アプリ")
 st.write("曲を流しながら、聴こえた単語のカードをクリックしていこう！")
 
@@ -8,24 +31,26 @@ default_words = (
     "君 愛 涙 未来 夜 光 夢 心 世界 さよなら 約束 風 今 空 星 手"
 )
 
-# 画面上の入力欄（ここで単語を自由に変更できます）
+# 画面上の入力欄
 input_text = st.text_area(
-    "曲の単語（スペースやカンマ、改行区切りで入力）", value=default_words, height=100
+    "曲の単語（スペースやカンマ、改行区切りで入力）",
+    value=default_words,
+    height=80,
 )
 
 # 単語のリスト化
 raw_words = input_text.replace(",", " ").replace("\n", " ").split()
 song_words = [w for w in raw_words if w.strip()]
 
-# セッション状態（ゲームのスコアや押した状態の保持）の初期化
+# セッション状態の初期化
 if "taken" not in st.session_state:
   st.session_state.taken = {}
 
 # リセットボタン
-if st.button("ゲームスタート / リセット"):
+if st.button("🔄 ゲームスタート / リセット", use_container_width=True):
   st.session_state.taken = {word: False for word in song_words}
 
-# カードが未初期化または単語が変わった場合の初期化
+# 単語変更時の初期化
 if len(st.session_state.taken) != len(song_words) or not all(
     w in st.session_state.taken for w in song_words
 ):
@@ -33,11 +58,11 @@ if len(st.session_state.taken) != len(song_words) or not all(
 
 st.write("---")
 
-# 取った枚数のカウント
+# スコア表示
 taken_count = sum(1 for v in st.session_state.taken.values() if v)
 st.subheader(f"取った札: {taken_count} / {len(song_words)} 枚")
 
-# カードをボタン形式でグリッド配置（4列）
+# カードを4列ずつ配置
 cols_per_row = 4
 rows = [
     song_words[i : i + cols_per_row]
@@ -45,13 +70,12 @@ rows = [
 ]
 
 for row in rows:
-  cols = st.columns(len(row))
+  cols = st.columns(4)  # 常に4列固定
   for idx, word in enumerate(row):
     with cols[idx]:
-      # すでに取られているか判定
       if st.session_state.taken.get(word, False):
         st.button(f"✅ {word}", key=f"btn_{word}", disabled=True)
       else:
-        if st.button(word, key=f"btn_{word}__active"):
+        if st.button(word, key=f"btn_{word}_active"):
           st.session_state.taken[word] = True
           st.rerun()
