@@ -2,19 +2,26 @@ import streamlit as st
 
 st.set_page_config(page_title="狩歌 練習アプリ", layout="centered")
 
-# スマホでもボタンを折り返さず綺麗な横並びグリッドにするカスタムCSS
+# スマホでも絶対に縦に崩さず4列の横並びを死守するCSS
 st.markdown(
     """
     <style>
-    /* ボタンの表示スタイルとグリッド調整 */
-    div[data-testid="column"] {
-        width: 23% !important;
-        flex: 0 0 23% !important;
-        min-width: 23% !important;
+    /* 親の並び順を強制的に横方向にする */
+    [data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+    }
+    /* 各カラムの幅を25%ずつにして横に並べる */
+    [data-testid="column"] {
+        width: 25% !important;
+        flex: 1 1 25% !important;
+        min-width: unset !important;
     }
     .stButton > button {
         width: 100%;
-        height: 3em;
+        height: 2.8em;
+        font-size: 13px !important;
         font-weight: bold;
         padding: 0px !important;
     }
@@ -70,7 +77,7 @@ rows = [
 ]
 
 for row in rows:
-  cols = st.columns(4)  # 常に4列固定
+  cols = st.columns(4)
   for idx, word in enumerate(row):
     with cols[idx]:
       if st.session_state.taken.get(word, False):
